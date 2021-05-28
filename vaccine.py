@@ -42,10 +42,10 @@ def check_availability(centers, debug_flag):
     next_monday = (datetime.now() + timedelta(days=-datetime.now().weekday(), weeks=1)).strftime("%d-%m-%Y")
     dates.append(today)
     dates.append(next_monday)
+    log.info("checking availability across centers")
     for center in centers:
         for date in dates:
             try:
-                log.info("checking for district %s for date %s", center, date)
                 response = requests.get(URL.format(center, date), headers={"user-agent": USER_AGENT})
                 response.raise_for_status()
                 if response.text == '{}':
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         debug = sys.argv[1]
     centerIds, centerNames = fetchCenters()
-    print("Found {0} centers near your location".format(len(centerIds)))
     if debug:
-        print(centerNames)
+        log.info("Found {0} centers near your location".format(len(centerIds)))
+    log.info(centerNames)
     check_availability(centers=centerIds, debug_flag=debug)
