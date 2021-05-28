@@ -1,40 +1,45 @@
 # vaccine-notifi-bot
-Code to send cowin vaccine slots availability notifications over telegram
+Refer to https://github.com/pranavtendolkr/vaccine-notifi-bot#readme for setup steps.
 
 
-## Getting the bot running:
+## SEARCH BY LOCATION
 
-1. Get a cloud VM. Oracle cloud gives two for free. Choose any India region while signing up. Other regions may get rate limited.
-2. install python,pip and telegram-send
-   - `sudo apt-get install python3 python3-pip`
-   - `pip3 install telegram-send`
-3. Run telegram-send to send messages in a group 
-   - run `telegram-send --configure-group` and follow the instructions on screen. It will involve through creating a bot, group and adding the bot to group
-   - test out teelgram send: run  `telegram-send "hello world"`
-4. Configure your district:
-   - to get state ID use:
-       ```curl -X GET "https://cdn-api.co-vin.in/api/v2/admin/location/states" -H "accept: application/json" -H "Accept-Language: hi_IN"```
-   - use the state id to get district info.:
-       ```curl -X GET "https://cdn-api.co-vin.in/api/v2/admin/location/districts/16" -H "accept: application/json" -H "Accept-Language: hi_IN"``` 
-   - edit the python file and put in your district ID
-6. Run the runme.sh in screen. This will keep polling the api and send a message in the group is slots are open.
-   - run `screen` and then  `runme.sh`
-   - if you want to keep getting messages for empty slots run `screen` and then `runme.sh debug`
 
-## How to book a slot
+This forked project allow you to find slots from all the available centers near your location.
 
-autobook.py provides the means to check and book the first slot that is available. 
+Update the `lat` and `long` variables in `vaccine.py`
 
-Using it:
-1. Get a login token from cowin.
- 
-   `login on cowin, open browser dev console -> applications -> session storage -> selfregistration.cowin.gov.in -> usertoken`
-2. Put the token in the TOKEN constant. Note that token will only be valid for 15 minutes.
-3. Enter the preferred city and pin code in the constants. From all the available slots for the district, the script will first try to book centers in this city and pin.
-4. Enter the district and date. 
-5. The code extracts the benificiary details from the token. If you want to book for someone else, change it in book_appointment()
-6. Run `python3 autobook.py`
-7. If slots are available, it will try to book it. Preferred timeslot will be the first one of the day 
-8. The captcha will be opened in the default program for svg files 
-9. Enter the captcha in the console
-10. Appointment id will be logged in the console. Can also check in cowin.
+You can get the values by a simple google search. Eg: "vasco da gama coordinates"
+
+
+**IMPROTANT** : Autoboooking is not tested by me.
+
+
+### EXAMPLE RUN:
+
+Note that the below data is not real and cannot be referenced for any purpose.
+
+```
+$ python3.9.exe .\vaccine.py debug
+Found 40 centers near your location
+['Ravindra Bhavan Vasco(FLW)', 'Mormugao Ravindra Bhavan', 'Vaatsalya Hospital (PMJAY)', 'INHS Covaxine', 'INHS Jeevanti', 'INHS Jeevanti', 'INS Hansa', 'Pai Hospital (PMJAY)', 'St Andrews HSS Vaddem', 'M P T Hospital', 'MPT Hospital', 'Chicalim SDH Mormugao (FLW)', 'RAJHANS', 'MPT FLW', 'VASCO UHC Mpt HCW', 'SDHospital Chicalim', 'Chicalim( Mop Up)', 'SDH Chicalim', 'SMRCs Hospital (DDSY)', 'Chicalim CHC Mormugao (FLW)', 'SDH Chicalim (Vasco UHC)', 'The Indians Hotels Co. LTD', 'Manipal Hospital', 'Chimbel PHC Manipal Hospital', 'PHC CHIMBEL Manipal Site', 'Chimbel PHC - Manipal Hospital', 'Chimbel Manipal', 'Manipal Hospital Goa', 'Manipal Work place', 'Community Hall Taliegao', 'Community Hall Taliegao', 'PHC Chimbel 18plus', 'Goa Medical College', 'Goa Medical College', 'Primary Health Centre Chimbel', 'Primary Health Centre Chimbel', 'Chimble Public Health Centre', 'PHC Chimble', 'Goa Medical College Bambolim', 'Goa Medical College Bambolim']
+ INHS Covaxine, South Goa , 28-05-2021, slots available: 0
+ The Indians Hotels Co. LTD, North Goa , 28-05-2021, slots available: 0
+ Manipal Hospital, North Goa , 28-05-2021, slots available: 10
+ Manipal Hospital, North Goa , 29-05-2021, slots available: 9
+ Manipal Hospital, North Goa , 31-05-2021, slots available: 94
+ Manipal Hospital, North Goa , 01-06-2021, slots available: 145
+ Manipal Hospital, North Goa , 02-06-2021, slots available: 118
+ Manipal Hospital, North Goa , 03-06-2021, slots available: 145
+ Manipal Hospital, North Goa , 31-05-2021, slots available: 94
+ Manipal Hospital, North Goa , 01-06-2021, slots available: 145
+ Manipal Hospital, North Goa , 02-06-2021, slots available: 118
+ Manipal Hospital, North Goa , 03-06-2021, slots available: 145
+ Manipal Hospital, North Goa , 04-06-2021, slots available: 15
+ Manipal Hospital, North Goa , 05-06-2021, slots available: 0
+ Manipal Hospital Goa, North Goa , 28-05-2021, slots available: 0
+ Manipal Hospital Goa, North Goa , 29-05-2021, slots available: 0
+ Manipal Hospital Goa, North Goa , 28-05-2021, slots available: 0
+ Manipal Hospital Goa, North Goa , 29-05-2021, slots available: 0
+ Chimble Public Health Centre, North Goa , 28-05-2021, slots available: 0
+ ```
