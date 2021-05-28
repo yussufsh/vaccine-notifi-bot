@@ -6,6 +6,7 @@ from requests import RequestException
 
 # search for age limit less than:
 AGE_LIMIT = 45
+DOSE=1
 
 #PANAJI
 #lat=15.4909
@@ -26,13 +27,14 @@ log.setLevel(logging.INFO)
 def print_availability(data, debug_flag):
     center=data["centers"]
     for session in center['sessions']:
+        ACKey = "available_capacity_dose{0}".format(DOSE)
         if session['min_age_limit'] < AGE_LIMIT:
             if debug_flag:
                 print(
-                    f" {center['name']}, {center['district_name']} , {session['date']}, slots available: {session['available_capacity']}")
-            if not debug_flag and session['available_capacity'] != 0:
+                    f" {center['name']}, {center['district_name']} , {session['date']}, slots available: {session[ACKey]}")
+            if not debug_flag and session[ACKey] != 0:
                 print(
-                    f" {center['name']}, {center['district_name']} , {session['date']}, slots available: {session['available_capacity']}")
+                    f" {center['name']}, {center['district_name']} , {session['date']}, slots available: {session[ACKey]}")
 
 def check_availability(centers, debug_flag):
     dates = []
